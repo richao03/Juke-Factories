@@ -6,7 +6,7 @@ juke.controller('AlbumCtrl', function  ($scope, $http, $rootScope, $log, StatsFa
 
   // load our initial data
 AlbumFactory.fetchAll()
-  .then(function (res) { return res.data; }) //returns array of 5 objects
+
   .then(function (albums) {
     return $http.get('/api/albums/' + albums[0].id); // temp: get one
   })
