@@ -27,6 +27,8 @@ AlbumFactory.fetchAll()
 
   })
   .catch($log.error); // $log service can be turned on and off; also, pre-bound
+
+
   AlbumFactory.fetchById(3)
  .then(function(found){
   return(found)
@@ -97,6 +99,9 @@ juke.factory('AlbumFactory', function ($http){
 var AlbumFactory = {}
   AlbumFactory.fetchAll = function(){
    return $http.get('/api/albums/')
+   .then(function(response){
+     return response.data
+   })
     }
 
     AlbumFactory.fetchById = function (number){

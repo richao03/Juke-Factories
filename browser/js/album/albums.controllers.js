@@ -2,5 +2,6 @@ juke.controller('AlbumsCtrl', function  ($scope, $http, $rootScope, $log, StatsF
 AlbumFactory.fetchAll()
 .then(function(found){
   console.log(found)
+ $scope.albums = found
 })
 })
