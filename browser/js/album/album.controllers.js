@@ -1,10 +1,12 @@
 'use strict';
 
-juke.controller('AlbumCtrl', function ($scope, $http, $rootScope, $log) {
+juke.controller('AlbumCtrl', function  ($scope, $http, $rootScope, $log, StatsFactory, AlbumFactory) {
+
+
 
   // load our initial data
-  $http.get('/api/albums/')
-  .then(function (res) { return res.data; })
+AlbumFactory.fetchAll()
+  .then(function (res) { return res.data; }) //returns array of 5 objects
   .then(function (albums) {
     return $http.get('/api/albums/' + albums[0].id); // temp: get one
   })
@@ -16,8 +18,19 @@ juke.controller('AlbumCtrl', function ($scope, $http, $rootScope, $log) {
       song.albumIndex = i;
     });
     $scope.album = album;
+
+  StatsFactory.totalTime(album)
+  .then(function (albumDuration) {
+      $scope.fullDuration = albumDuration;
+  });
+
+
   })
   .catch($log.error); // $log service can be turned on and off; also, pre-bound
+  AlbumFactory.fetchById(3)
+ .then(function(found){
+  return(found)
+ })
 
   // main toggle
   $scope.toggle = function (song) {
@@ -55,4 +68,43 @@ juke.controller('AlbumCtrl', function ($scope, $http, $rootScope, $log) {
   function next () { skip(1); };
   function prev () { skip(-1); };
 
+
+
+
 });
+juke.factory('StatsFactory', function ($q) {
+  var statsObj = {};
+  statsObj.totalTime = function (album) {
+    var audio = document.createElement('audio');
+    return $q(function (resolve, reject) {
+      var sum = 0;
+      var n = 0;
+      function resolveOrRecur () {
+        if (n >= album.songs.length) resolve(sum);
+        else audio.src = album.songs[n++].audioUrl;
+      }
+      audio.addEventListener('loadedmetadata', function () {
+        sum += audio.duration;
+        resolveOrRecur();
+      });
+      resolveOrRecur();
+    });
+  };
+  return statsObj;
+});
+
+juke.factory('AlbumFactory', function ($http){
+var AlbumFactory = {}
+  AlbumFactory.fetchAll = function(){
+   return $http.get('/api/albums/')
+    }
+
+    AlbumFactory.fetchById = function (number){
+       return $http.get('/api/albums/' + number);
+    }
+
+return AlbumFactory
+ })
+
+
+
