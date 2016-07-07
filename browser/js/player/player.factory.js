@@ -34,7 +34,7 @@ juke.factory('PlayerFactory', function($http, $rootScope) {
     $rootScope.$evalAsync();
   });
 
-  
+
   PlayerFactory.start = function(song, songList) {
       PlayerFactory
         .pause();
