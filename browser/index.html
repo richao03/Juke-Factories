@@ -28,7 +28,7 @@
       </div>
 
       <div class="col-xs-10">
-        <div class="album" ng-controller="AlbumCtrl" ng-show= "false">
+        <div class="album" ng-controller="AlbumCtrl" ng-show= "true">
           <p>
             <h3>{{ album.name }} Total Time : {{fullDuration}}</h3>
             <img ng-src="" class="img-thumbnail">
@@ -57,17 +57,17 @@
           </table>
         </div>
 
-<div ng-show="true" ng-controller="AlbumsCtrl" >
+<div ng-controller="AlbumsCtrl" ng-show="false" >
   <h3>Albums</h3>
   <div class="row">
     <div class="col-xs-4" ng-repeat = "album in albums">
       <a class="thumbnail" href="#">
-        <img ng-src={{album.imageUrl}}>
+        <img ng-src={{returnUrl(album)}}>
         <div class="caption">
           <h5>
             <span>{{album.name}}</span>
           </h5>
-          <small>NUMBER OF SONGS HERE songs</small>
+          <small>{{album.songs.length}}</small>
         </div>
       </a>
     </div>
